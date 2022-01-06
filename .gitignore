@@ -1,0 +1,7 @@
+# temp data (will be recreated)
+.pio/
+.settings/
+versioning
+
+# sensitive data (passwords etc.)
+data/homie/config.json
