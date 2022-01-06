@@ -1,0 +1,214 @@
+EESchema Schematic File Version 4
+EELAYER 30 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 1
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L MCU_Module:WeMos_D1_mini U1
+U 1 1 61538B76
+P 4750 3300
+F 0 "U1" H 4750 2411 50  0000 C CNN
+F 1 "WeMos_D1_mini" H 4750 2320 50  0000 C CNN
+F 2 "Module:WEMOS_D1_mini_light" H 4750 2150 50  0001 C CNN
+F 3 "https://wiki.wemos.cc/products:d1:d1_mini#documentation" H 2900 2150 50  0001 C CNN
+	1    4750 3300
+	1    0    0    -1  
+$EndComp
+$Comp
+L Driver_LED:MAX7219 U2
+U 1 1 61539499
+P 7050 3300
+F 0 "U2" H 7050 4481 50  0000 C CNN
+F 1 "MAX7219" H 7050 4390 50  0000 C CNN
+F 2 "" H 7000 3350 50  0001 C CNN
+F 3 "https://datasheets.maximintegrated.com/en/ds/MAX7219-MAX7221.pdf" H 7100 3150 50  0001 C CNN
+	1    7050 3300
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5150 3400 6050 3400
+Wire Wire Line
+	6050 3400 6050 4000
+Wire Wire Line
+	6050 4000 6650 4000
+Wire Wire Line
+	5150 3600 5900 3600
+Wire Wire Line
+	5900 3600 5900 4100
+Wire Wire Line
+	5900 4100 6650 4100
+Wire Wire Line
+	5150 3700 5650 3700
+Wire Wire Line
+	5650 3700 5650 3900
+Wire Wire Line
+	5650 3900 6650 3900
+$Comp
+L Switch:SW_Push SW1
+U 1 1 6153CA06
+P 4600 1300
+F 0 "SW1" V 4646 1252 50  0000 R CNN
+F 1 "SW_Push" V 4555 1252 50  0000 R CNN
+F 2 "" H 4600 1500 50  0001 C CNN
+F 3 "~" H 4600 1500 50  0001 C CNN
+	1    4600 1300
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Switch:SW_Push SW2
+U 1 1 6153D1DF
+P 5350 1300
+F 0 "SW2" V 5396 1252 50  0000 R CNN
+F 1 "SW_Push" V 5305 1252 50  0000 R CNN
+F 2 "" H 5350 1500 50  0001 C CNN
+F 3 "~" H 5350 1500 50  0001 C CNN
+	1    5350 1300
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Switch:SW_Push SW3
+U 1 1 6153D5B6
+P 6000 1300
+F 0 "SW3" V 6046 1252 50  0000 R CNN
+F 1 "SW_Push" V 5955 1252 50  0000 R CNN
+F 2 "" H 6000 1500 50  0001 C CNN
+F 3 "~" H 6000 1500 50  0001 C CNN
+	1    6000 1300
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Switch:SW_Push SW4
+U 1 1 6153D893
+P 6650 1300
+F 0 "SW4" V 6696 1252 50  0000 R CNN
+F 1 "SW_Push" V 6605 1252 50  0000 R CNN
+F 2 "" H 6650 1500 50  0001 C CNN
+F 3 "~" H 6650 1500 50  0001 C CNN
+	1    6650 1300
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Switch:SW_Push SW5
+U 1 1 6153DA9D
+P 7350 1350
+F 0 "SW5" V 7396 1302 50  0000 R CNN
+F 1 "SW_Push" V 7305 1302 50  0000 R CNN
+F 2 "" H 7350 1550 50  0001 C CNN
+F 3 "~" H 7350 1550 50  0001 C CNN
+	1    7350 1350
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	4600 1500 4600 2250
+Wire Wire Line
+	4600 2250 5350 2250
+Wire Wire Line
+	5350 2250 5350 2900
+Wire Wire Line
+	5350 2900 5150 2900
+Wire Wire Line
+	5350 1500 5350 2100
+Wire Wire Line
+	5350 2100 5450 2100
+Wire Wire Line
+	5450 2100 5450 3000
+Wire Wire Line
+	5450 3000 5150 3000
+Wire Wire Line
+	6000 1500 6000 3100
+Wire Wire Line
+	6000 3100 5150 3100
+Wire Wire Line
+	6650 1500 6100 1500
+Wire Wire Line
+	6100 1500 6100 3200
+Wire Wire Line
+	6100 3200 5150 3200
+Wire Wire Line
+	7350 1550 7350 1750
+Wire Wire Line
+	7350 1750 6150 1750
+Wire Wire Line
+	6150 1750 6150 3300
+Wire Wire Line
+	6150 3300 5150 3300
+Wire Wire Line
+	4600 1100 4600 950 
+Wire Wire Line
+	4600 950  5350 950 
+Wire Wire Line
+	8300 950  8300 1400
+Wire Wire Line
+	5350 1100 5350 950 
+Connection ~ 5350 950 
+Wire Wire Line
+	5350 950  6000 950 
+Wire Wire Line
+	6000 1100 6000 950 
+Connection ~ 6000 950 
+Wire Wire Line
+	6000 950  6650 950 
+Wire Wire Line
+	6650 1100 6650 950 
+Connection ~ 6650 950 
+Wire Wire Line
+	7350 1150 7350 950 
+Wire Wire Line
+	6650 950  7350 950 
+Connection ~ 7350 950 
+Wire Wire Line
+	7350 950  8300 950 
+$Comp
+L power:GND #PWR02
+U 1 1 61543047
+P 8300 1400
+F 0 "#PWR02" H 8300 1150 50  0001 C CNN
+F 1 "GND" H 8305 1227 50  0000 C CNN
+F 2 "" H 8300 1400 50  0001 C CNN
+F 3 "" H 8300 1400 50  0001 C CNN
+	1    8300 1400
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:Buzzer BZ1
+U 1 1 6154DFE7
+P 5750 4600
+F 0 "BZ1" H 5902 4629 50  0000 L CNN
+F 1 "Buzzer" H 5902 4538 50  0000 L CNN
+F 2 "" V 5725 4700 50  0001 C CNN
+F 3 "~" V 5725 4700 50  0001 C CNN
+	1    5750 4600
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5150 3500 5500 3500
+Wire Wire Line
+	5500 3500 5500 4500
+Wire Wire Line
+	5500 4500 5650 4500
+Wire Wire Line
+	5650 4700 5500 4700
+Wire Wire Line
+	5500 4700 5500 4800
+$Comp
+L power:GND #PWR01
+U 1 1 6154FEDF
+P 5500 4800
+F 0 "#PWR01" H 5500 4550 50  0001 C CNN
+F 1 "GND" H 5505 4627 50  0000 C CNN
+F 2 "" H 5500 4800 50  0001 C CNN
+F 3 "" H 5500 4800 50  0001 C CNN
+	1    5500 4800
+	1    0    0    -1  
+$EndComp
+$EndSCHEMATC
