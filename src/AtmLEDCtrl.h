@@ -9,7 +9,7 @@ class Atm_LEDCtrl: public SubMachine {
  public:
   enum { IDLE, WHITE_CTRL, WHITE_INC, WHITE_DEC, WHITE_TOGGLE }; // STATES
   enum { EVT_BUTTON1, EVT_BUTTON2, EVT_BUTTON3, EVT_BUTTON4, EVT_TIMEOUT, EVT_START, ELSE }; // EVENTS
-  Atm_LEDCtrl( void ) : SubMachine(), runOnce(false) {};
+  Atm_LEDCtrl( AtmMenu& mm ) : SubMachine(mm), runOnce(false) {};
   virtual ~Atm_LEDCtrl() {};
 
   Atm_LEDCtrl& begin( void );

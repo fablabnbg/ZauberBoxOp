@@ -8,7 +8,7 @@ class Atm_CoffeeTimer: public SubMachine {
  public:
   enum { IDLE_OFF, PREPARE, CLEAN_INIT, CLEAN_PRESS, CLEAN_OPEN, FLUSH_INIT, FLUSH_PRESS, FLUSH_OPEN, EMPTY, FINISH }; // STATES
   enum { EVT_START, EVT_CONTINUE, EVT_ABORT, EVT_COUNTER, EVT_TIMEOUT, ELSE }; // EVENTS
-  Atm_CoffeeTimer( void ) : SubMachine() {};
+  Atm_CoffeeTimer( AtmMenu& mm ) : SubMachine(mm) {};
   Atm_CoffeeTimer& begin( void );
   Atm_CoffeeTimer& trace( Stream & stream );
   Atm_CoffeeTimer& trigger( int event );

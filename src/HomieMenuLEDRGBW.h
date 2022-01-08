@@ -16,7 +16,7 @@
 class HomieMenuLEDRGBW: public HomieNode {
 
 public:
-	HomieMenuLEDRGBW();
+	HomieMenuLEDRGBW(AtmMenu& mm);
 	SubMachine& getStm() {
 		return ledstm;
 	}

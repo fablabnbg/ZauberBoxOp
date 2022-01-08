@@ -8,8 +8,9 @@
 #include <HomieMenuLEDRGBW.h>
 #include <LoggerNode.h>
 
-HomieMenuLEDRGBW::HomieMenuLEDRGBW():
-	HomieNode("RGBWCtrl", "Menüsteuerung für RGB", "rgbw_ctrl")
+HomieMenuLEDRGBW::HomieMenuLEDRGBW(AtmMenu& mm):
+	HomieNode("RGBWCtrl", "Menüsteuerung für RGB", "rgbw_ctrl"),
+	ledstm(mm)
 {
 
 }

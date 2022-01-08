@@ -35,6 +35,17 @@ class AtmMenu: public Machine {
 
   void setSubMenu(uint_fast8_t idx, SubMachine *m);
 
+  /* LED Matrix functions (that use MD_Parola/MD_MAX72xx libraries).
+   *     The LED Matrix integration is tightly coupled to this statemachine. This is a design decision to avoid complexity.
+   *     In future version there may be a loser coupling, e.g. by providing a own class for interaction with the LED matrix
+   *
+   *   These function can be called by the Submachines to access the LED matrix
+   *
+   */
+
+  void showIcon8x8(uint8_t pos, const uint8_t* icon_data);
+
+
 
  private:
   enum { ENT_IDLE, ENT_LED_B, ENT_LED_CEIL, ENT_HEATER, ENT_COFFEE, ENT_LEAVE_SUB, LP_LEAVE_SUB }; // ACTIONS
@@ -57,13 +68,14 @@ class AtmMenu: public Machine {
   #define MAX_DEVICES 4
   MD_Parola Parola;
 
-  static uint8_t sprite_coffee[9];
-  static uint8_t sprite_heater[9];
-  static uint8_t sprite_light_ceil[9];
-  static uint8_t sprite_light_below[9];
-  static uint8_t sprite_onoff[9];
+  static const uint8_t sprite_startPos[4];
+public:
+  static const uint8_t sprite_coffee[9];
+  static const uint8_t sprite_heater[9];
+  static const uint8_t sprite_light_ceil[9];
+  static const uint8_t sprite_light_below[9];
+  static const uint8_t sprite_onoff[9];
 
-  static const uint16_t sprite_startPos[4];
 
 
 

@@ -87,10 +87,10 @@ void AtmMenu::action(int id) {
 	case ENT_IDLE:
 		timer.set(ATM_TIMER_OFF);
 		Parola.displaySuspend(true);
-		Parola.getGraphicObject()->setBuffer(sprite_startPos[3], 8, sprite_coffee);
-		Parola.getGraphicObject()->setBuffer(sprite_startPos[2], 8, sprite_light_ceil);
-		Parola.getGraphicObject()->setBuffer(sprite_startPos[1], 8, sprite_light_below);
-		Parola.getGraphicObject()->setBuffer(sprite_startPos[0], 8, sprite_heater);
+		showIcon8x8(3, sprite_coffee);
+		showIcon8x8(2, sprite_light_ceil);
+		showIcon8x8(1, sprite_light_below);
+		showIcon8x8(0, sprite_heater);
 		return;
 //	case EXT_IDLE:
 //		Parola.displaySuspend(false);
@@ -101,12 +101,9 @@ void AtmMenu::action(int id) {
 		timer.set(ATM_TIMER_OFF);
 		Parola.displaySuspend(true);
 		Parola.displayClear();
-		Parola.getGraphicObject()->setBuffer(31, 8, sprite_light_below);
-		Parola.getGraphicObject()->setBuffer(15, 8, sprite_onoff);
 		sub_menu[LED_B]->start();
 //		Parola.displayText("LED W", PA_CENTER, Parola.getSpeed(), 100, PA_SPRITE, PA_SPRITE);
 //		Parola.setSpriteData(sprite_light, 8, 1, sprite_light, 8, 1);
-
 		return;
 	case ENT_LED_CEIL:
 		Parola.displayText("LED RGBV", PA_CENTER, Parola.getSpeed(), 100, PA_SPRITE, PA_SPRITE);
@@ -194,14 +191,20 @@ AtmMenu& AtmMenu::trace( Stream & stream ) {
 
 
 // PROGMEM can't be used here, because it is directly accesses in called library (MD_MAX72xx)
-uint8_t AtmMenu::sprite_coffee[9] = {0x1c, 0xa4, 0xbc, 0xc4, 0xc5, 0xc6, 0xc4, 0xbc, 0};
-uint8_t AtmMenu::sprite_light_ceil[9] = {0x01, 0x01, 0xfb, 0x0d, 0x0b, 0x0d, 0x09, 0x09,0};
-uint8_t AtmMenu::sprite_light_below[9] = {0x00, 0x47, 0x34, 0x4c, 0x34, 0x0c, 0x04, 0xfc, 0};
-uint8_t AtmMenu::sprite_heater[9] = { 0xa4, 0x92, 0x89, 0x89, 0x92, 0xa4, 0xa4,	0x92, 0 };
-uint8_t AtmMenu::sprite_onoff[9] = { 0x00,0x1c,0x22,0x40,0x47,0x40,0x22,0x1c,0};
+const uint8_t AtmMenu::sprite_coffee[9] = {0x1c, 0xa4, 0xbc, 0xc4, 0xc5, 0xc6, 0xc4, 0xbc, 0};
+const uint8_t AtmMenu::sprite_light_ceil[9] = {0x01, 0x01, 0xfb, 0x0d, 0x0b, 0x0d, 0x09, 0x09,0};
+const uint8_t AtmMenu::sprite_light_below[9] = {0x00, 0x47, 0x34, 0x4c, 0x34, 0x0c, 0x04, 0xfc, 0};
+const uint8_t AtmMenu::sprite_heater[9] = { 0xa4, 0x92, 0x89, 0x89, 0x92, 0xa4, 0xa4,	0x92, 0 };
+const uint8_t AtmMenu::sprite_onoff[9] = { 0x00,0x1c,0x22,0x40,0x47,0x40,0x22,0x1c,0};
 
-const uint16_t AtmMenu::sprite_startPos[4] = {7, 15, 23, 31};
+const uint8_t AtmMenu::sprite_startPos[4] = { 7, 15, 23, 31 };
 
+
+void AtmMenu::showIcon8x8(uint8_t pos, const uint8_t *icon_data) {
+	assert (pos < 4);  // pos must be 0 <= pos <= 3
+	// Unfortunately, MD_MAX72xx is not const correct. icon_data is read only in MD_MAX72xx so it could be const and so it is safe here to cast the const away
+	Parola.getGraphicObject()->setBuffer(sprite_startPos[pos], 8, const_cast<uint8_t *>(icon_data));
+}
 //uint8_t AtmMenu::sprite_heater[9] = {0x0c,0x92,0x61,0x0c,0x92,0x61,0x00,0xff,0};
 //uint8_t AtmMenu::sprite_light[9] = {0x18,0x24,0x42,0x42,0x42,0x24,0x18,0x18,0};
 //uint8_t AtmMenu::sprite_heater[9] = {0x0c,0x92,0x61,0x0c,0x92,0x61,0x00,0xff,0};

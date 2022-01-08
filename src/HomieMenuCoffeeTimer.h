@@ -13,7 +13,7 @@
 
 class HomieMenuCoffeeTimer: public HomieNode {
 public:
-	HomieMenuCoffeeTimer();
+	HomieMenuCoffeeTimer(AtmMenu& mm);
 
 	Atm_CoffeeTimer& getCtstm() {
 		return ctstm;

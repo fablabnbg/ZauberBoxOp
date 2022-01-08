@@ -9,9 +9,9 @@
 #include <LoggerNode.h>
 
 
-HomieMenuCoffeeTimer::HomieMenuCoffeeTimer():
+HomieMenuCoffeeTimer::HomieMenuCoffeeTimer(AtmMenu& mm):
 	HomieNode("coffeetimer", "Menüsteuerung Küche IA: CafeTimer", "menu"),
-	ctstm(),
+	ctstm(mm),
 	mainState(false)
 {
 

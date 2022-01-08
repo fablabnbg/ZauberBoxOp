@@ -1,4 +1,5 @@
 #include "AtmLEDCtrl.h"
+#include "AtmMenu.h"
 
 /* Add optional parameters for the state machine to begin()
  * Add extra initialization code
@@ -82,6 +83,8 @@ void Atm_LEDCtrl::action( int id ) {
 
 SubMachine& Atm_LEDCtrl::start() {
   trigger( EVT_START );
+  mainMenu.showIcon8x8(3, AtmMenu::sprite_light_below);
+  mainMenu.showIcon8x8(1, AtmMenu::sprite_onoff);
   return *this;
 }
 
