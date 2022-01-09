@@ -10,13 +10,17 @@
 
 #include <HomieNode.hpp>
 #include <Atm_CoffeeTimer.h>
+#include <AtmMenuOnOff.h>
 
 class HomieMenuCoffeeTimer: public HomieNode {
 public:
 	HomieMenuCoffeeTimer(AtmMenu& mm);
 
-	Atm_CoffeeTimer& getCtstm() {
+	SubMachine& getCtstm() {
 		return ctstm;
+	}
+	SubMachine& getCstm() {
+		return cstm;
 	}
 
 	bool toggleMainState();
@@ -30,6 +34,7 @@ protected:
 
 private:
 	Atm_CoffeeTimer ctstm;
+	Atm_MenuOnOff   cstm;
 	bool mainState;
 };
 

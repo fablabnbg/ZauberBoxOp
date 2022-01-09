@@ -8,6 +8,7 @@
 
 #include "AtmMenu.h"
 
+#include <fonts/3x5.h>
 
 AtmMenu::AtmMenu(void):
 		Machine(),
@@ -22,13 +23,13 @@ AtmMenu::AtmMenu(void):
 AtmMenu& AtmMenu::begin() {
   // clang-format off
 	  const static state_t state_table[] PROGMEM = {
-	    /*                   ON_ENTER  ON_LOOP  ON_EXIT  EVT_BUTTON1  EVT_BUTTON2  EVT_BUTTON3  EVT_BUTTON4  EVT_TIMEOUT  EVT_ANI_FINISH  EVT_SUB_EXIT  ELSE */
-	    /*      IDLE */      ENT_IDLE,      -1,      -1,      HEATER,       LED_B,    LED_CEIL,      COFFEE,          -1,             -1,           -1,   -1,
-	    /*     LED_B */     ENT_LED_B,      -1,      -1,          -1,          -1,          -1,          -1,   LEAVE_SUB,             -1,    LEAVE_SUB,   -1,
-	    /*  LED_CEIL */  ENT_LED_CEIL,      -1,      -1,          -1,          -1,          -1,          -1,   LEAVE_SUB,             -1,    LEAVE_SUB,   -1,
-	    /*    HEATER */    ENT_HEATER,      -1,      -1,          -1,          -1,          -1,          -1,   LEAVE_SUB,             -1,    LEAVE_SUB,   -1,
-	    /*    COFFEE */    ENT_COFFEE,      -1,      -1,          -1,          -1,          -1,          -1,   LEAVE_SUB,             -1,    LEAVE_SUB,   -1,
-	    /* LEAVE_SUB */ ENT_LEAVE_SUB, LP_LEAVE_SUB, -1,          -1,          -1,          -1,          -1,          -1,           IDLE,           -1,   -1,
+	    /*                   ON_ENTER  ON_LOOP  ON_EXIT  EVT_BUTTON1  EVT_BUTTON2  EVT_BUTTON3  EVT_BUTTON4  EVT_TIMEOUT  EVT_ANI_STEP  EVT_ANI_FINISH  EVT_SUB_EXIT  ELSE */
+	    /*      IDLE */      ENT_IDLE,      -1,      -1,      HEATER,       LED_B,    LED_CEIL,      COFFEE,          -1,        -1,            -1,           -1,   -1,
+	    /*     LED_B */     ENT_LED_B,      -1,      -1,          -1,          -1,          -1,          -1,   LEAVE_SUB,        -1,            -1,    LEAVE_SUB,   -1,
+	    /*  LED_CEIL */  ENT_LED_CEIL,      -1,      -1,          -1,          -1,          -1,          -1,   LEAVE_SUB,        -1,            -1,    LEAVE_SUB,   -1,
+	    /*    HEATER */    ENT_HEATER,      -1,      -1,          -1,          -1,          -1,          -1,   LEAVE_SUB,        -1,            -1,    LEAVE_SUB,   -1,
+	    /*    COFFEE */    ENT_COFFEE,      -1,      -1,          -1,          -1,          -1,          -1,   LEAVE_SUB,        -1,            -1,    LEAVE_SUB,   -1,
+	    /* LEAVE_SUB */ ENT_LEAVE_SUB, LP_LEAVE_SUB, EXT_LEAVE_SUB,  -1,       -1,          -1,          -1,   -1,         LEAVE_SUB,          IDLE,           -1,   -1,
 	  };
 
   // clang-format on
@@ -86,6 +87,7 @@ void AtmMenu::action(int id) {
 	switch (id) {
 	case ENT_IDLE:
 		timer.set(ATM_TIMER_OFF);
+		animator.begin(0);
 		Parola.displaySuspend(true);
 		showIcon8x8(3, sprite_coffee);
 		showIcon8x8(2, sprite_light_ceil);
@@ -98,7 +100,7 @@ void AtmMenu::action(int id) {
 //		return;
 	case ENT_LED_B:
 		//timer.set(5000);
-		timer.set(ATM_TIMER_OFF);
+		timer.set(15000);
 		Parola.displaySuspend(true);
 		Parola.displayClear();
 		sub_menu[LED_B]->start();
@@ -106,26 +108,36 @@ void AtmMenu::action(int id) {
 //		Parola.setSpriteData(sprite_light, 8, 1, sprite_light, 8, 1);
 		return;
 	case ENT_LED_CEIL:
-		Parola.displayText("LED RGBV", PA_CENTER, Parola.getSpeed(), 100, PA_SPRITE, PA_SPRITE);
-		Parola.setSpriteData(sprite_light_ceil, 8, 1, sprite_light_ceil, 8, 1);
+		timer.set(5000);
+//		Parola.displayText("LED RGBV", PA_CENTER, Parola.getSpeed(), 100, PA_SPRITE, PA_SPRITE);
+//		Parola.setSpriteData(sprite_light_ceil, 8, 1, sprite_light_ceil, 8, 1);
 		return;
 	case ENT_HEATER:
-		Parola.displayText("Thermo", PA_CENTER, Parola.getSpeed(), 100, PA_SPRITE, PA_SPRITE);
-		Parola.setSpriteData(sprite_heater, 8, 1, sprite_heater, 8, 1);
+		timer.set(ATM_TIMER_OFF);
+		Parola.displaySuspend(true);
+		Parola.displayClear();
+		sub_menu[HEATER]->start();
+//
+//		Parola.displayText("Thermo", PA_CENTER, Parola.getSpeed(), 100, PA_SPRITE, PA_SPRITE);
+//		Parola.setSpriteData(sprite_heater, 8, 1, sprite_heater, 8, 1);
 		return;
 	case ENT_COFFEE:
-		Parola.displayText("Kaffee", PA_CENTER, Parola.getSpeed(), 1000, PA_SPRITE, PA_SPRITE);
-		Parola.setSpriteData(sprite_coffee, 8, 1, sprite_coffee, 8, 1);
+		//timer.set(5000);
+		timer.set(ATM_TIMER_OFF);
+		Parola.displaySuspend(true);
+		Parola.displayClear();
+		sub_menu[COFFEE]->start();
+//		Parola.displayText("Kaffee", PA_CENTER, Parola.getSpeed(), 1000, PA_SPRITE, PA_SPRITE);
+//		Parola.setSpriteData(sprite_coffee, 8, 1, sprite_coffee, 8, 1);
 		return;
 	case ENT_LEAVE_SUB:
-		animator.trace(Serial).begin(150, 8).onFinish(*this, EVT_ANI_FINISH).start();
+		if (animator.state() == Atm_timer::IDLE) animator.begin(100, 7).onTimer(*this, EVT_ANI_STEP).onFinish(*this, EVT_ANI_FINISH).start();
 		return;
 	case LP_LEAVE_SUB:
-    	if (animator.left() < 1 ) {  //TODO: ugly hack
-    		Parola.getGraphicObject()->transform(MD_MAX72XX::TSU);
-    	}
       return;
-
+	case EXT_LEAVE_SUB:
+		Parola.getGraphicObject()->transform(MD_MAX72XX::TSU);
+		return;
 	}
 }
 
@@ -180,7 +192,7 @@ int AtmMenu::state( void ) {
 
 AtmMenu& AtmMenu::trace( Stream & stream ) {
 	  Machine::setTrace( &stream, atm_serial_debug::trace,
-	    "ATMMENU\0EVT_BUTTON1\0EVT_BUTTON2\0EVT_BUTTON3\0EVT_BUTTON4\0EVT_TIMEOUT\0EVT_ANI_FINISH\0EVT_SUB_EXIT\0ELSE\0IDLE\0LED_B\0LED_CEIL\0HEATER\0COFFEE\0LEAVE_SUB" );
+	    "ATMMENU\0EVT_BUTTON1\0EVT_BUTTON2\0EVT_BUTTON3\0EVT_BUTTON4\0EVT_TIMEOUT\0EVT_ANI_STEP\0EVT_ANI_FINISH\0EVT_SUB_EXIT\0ELSE\0IDLE\0LED_B\0LED_CEIL\0HEATER\0COFFEE\0LEAVE_SUB" );
 //  but1.trace(stream);
 //  but2.trace(stream);
 //  but3.trace(stream);
@@ -204,6 +216,34 @@ void AtmMenu::showIcon8x8(uint8_t pos, const uint8_t *icon_data) {
 	assert (pos < 4);  // pos must be 0 <= pos <= 3
 	// Unfortunately, MD_MAX72xx is not const correct. icon_data is read only in MD_MAX72xx so it could be const and so it is safe here to cast the const away
 	Parola.getGraphicObject()->setBuffer(sprite_startPos[pos], 8, const_cast<uint8_t *>(icon_data));
+}
+
+
+void AtmMenu::showDeciInt(const int16_t dInt) {
+	char s[4];
+	String intStr(dInt);
+	assert(intStr.length()>=3);
+	s[0] = intStr.c_str()[0];
+	s[1] = intStr.c_str()[1];
+	s[2] = '.';
+	s[3] = intStr.c_str()[2];
+
+	Parola.getGraphicObject()->setFont(font3x5);
+	uint16_t start_pos = 18;
+	for (uint_fast8_t count=0; count<=3; count++) {
+		start_pos -= Parola.getGraphicObject()->setChar(start_pos, s[count]);
+		if (count == 0) start_pos--;
+	}
+
+}
+void AtmMenu::showSmallText(const String& text) {
+//	Parola.setFont(font3x5);
+//	Parola.displayText(text.c_str(), PA_CENTER, 0, 0, PA_NO_EFFECT);
+//	Parola.displayAnimate();
+	Parola.getGraphicObject()->setFont(font3x5);
+	Parola.getGraphicObject()->setChar(15, text.c_str()[0]);
+	Parola.getGraphicObject()->setChar(8, '5');
+
 }
 //uint8_t AtmMenu::sprite_heater[9] = {0x0c,0x92,0x61,0x0c,0x92,0x61,0x00,0xff,0};
 //uint8_t AtmMenu::sprite_light[9] = {0x18,0x24,0x42,0x42,0x42,0x24,0x18,0x18,0};

@@ -16,9 +16,9 @@ HomieMenuLEDRGBW::HomieMenuLEDRGBW(AtmMenu& mm):
 }
 
 void HomieMenuLEDRGBW::setup() {
-	advertise("rgb_cmd").setDatatype("enum").setFormat("ON:OFF:INC_B:DEC_B:INC_H:DEC_H:INC_V:DEC_V").settable();
+	advertise("rgb_cmd").setDatatype("enum").setFormat("ON:OFF:INC_B:DEC_B:INC_H:DEC_H:INC_V:DEC_V").setRetained(false).settable();
 	advertise("rgb_state").setDatatype("color").setFormat("hsv").settable();
-	advertise("w_cmd").setDatatype("enum").setFormat("ON:OFF:INCREASE:DECREASE:TOGGLE");
+	advertise("w_cmd").setDatatype("enum").setFormat("ON:OFF:INCREASE:DECREASE:TOGGLE").setRetained(false);
 	advertise("w_state").setDatatype("integer").setUnit("%").setFormat("0:100").settable();
 
 	ledstm.begin();
@@ -52,7 +52,7 @@ void HomieMenuLEDRGBW::handleStmCallback(int idx, int v, int up) {
 			command = "INCREASE";
 			break;
 		}
-		setProperty("w_cmd").send(command);
+		setProperty("w_cmd").setRetained(false).send(command);
 		break;
 	default:
 		LN.logf("HomieMenuLEDRGBW::handleStmCallback", LoggerNode::WARNING, "Unkown IDX (Property) %x\n", idx);

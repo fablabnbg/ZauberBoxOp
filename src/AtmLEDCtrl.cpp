@@ -85,6 +85,8 @@ SubMachine& Atm_LEDCtrl::start() {
   trigger( EVT_START );
   mainMenu.showIcon8x8(3, AtmMenu::sprite_light_below);
   mainMenu.showIcon8x8(1, AtmMenu::sprite_onoff);
+  mainMenu.showIcon8x8(2, sprite_up);
+  mainMenu.showIcon8x8(0, sprite_dn);
   return *this;
 }
 

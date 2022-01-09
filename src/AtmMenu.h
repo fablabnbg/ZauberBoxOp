@@ -24,7 +24,7 @@ class AtmMenu: public Machine {
 	enum MenuState {
 		IDLE=0, LED_B, LED_CEIL, HEATER, COFFEE, LEAVE_SUB, STATE_COUNT
 	} ; // STATES
-	  enum { EVT_BUTTON1, EVT_BUTTON2, EVT_BUTTON3, EVT_BUTTON4, EVT_TIMEOUT, EVT_ANI_FINISH, EVT_SUB_EXIT, ELSE }; // EVENTS
+	  enum { EVT_BUTTON1, EVT_BUTTON2, EVT_BUTTON3, EVT_BUTTON4, EVT_TIMEOUT, EVT_ANI_STEP, EVT_ANI_FINISH, EVT_SUB_EXIT, ELSE }; // EVENTS
   AtmMenu( void );
   virtual ~AtmMenu(void) {};
 
@@ -44,11 +44,13 @@ class AtmMenu: public Machine {
    */
 
   void showIcon8x8(uint8_t pos, const uint8_t* icon_data);
+  void showSmallText(const String& txt);
+  void showDeciInt(const int16_t dInt);
 
 
 
  private:
-  enum { ENT_IDLE, ENT_LED_B, ENT_LED_CEIL, ENT_HEATER, ENT_COFFEE, ENT_LEAVE_SUB, LP_LEAVE_SUB }; // ACTIONS
+  enum { ENT_IDLE, ENT_LED_B, ENT_LED_CEIL, ENT_HEATER, ENT_COFFEE, ENT_LEAVE_SUB, LP_LEAVE_SUB, EXT_LEAVE_SUB }; // ACTIONS
   int event( int id );
   void action( int id );
 

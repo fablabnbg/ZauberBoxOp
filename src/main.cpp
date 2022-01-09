@@ -12,6 +12,7 @@
 #include <LoggerNode.h>
 #include <HomieMenuCoffeeTimer.h>
 #include <HomieMenuLEDRGBW.h>
+#include <AtmMenuSetPoint.h>
 #include <version.h>
 
 
@@ -21,6 +22,7 @@ LoggerNode LN;
 AtmMenu menu;
 HomieMenuCoffeeTimer hctimer(menu);
 HomieMenuLEDRGBW hledctrl_b(menu);		// LED Ctrl below
+Atm_MenuSetPoint menuHeat(menu);
 
 void setup(void) {
 	Serial.begin(74880);
@@ -28,8 +30,9 @@ void setup(void) {
 	Serial.flush();
 	menu.begin();
 	menu.trace(Serial);
-	menu.setSubMenu(4, &(hctimer.getCtstm())); // TODO: HCMTimer is a Sub-Sub-Menu
-	menu.setSubMenu(1, &(hledctrl_b.getStm()));
+	menu.setSubMenu(AtmMenu::MenuState::COFFEE, &(hctimer.getCstm())); // TODO: HCMTimer (CtStm) is a Sub-Sub-Menu
+	menu.setSubMenu(AtmMenu::MenuState::LED_B, &(hledctrl_b.getStm()));
+	menu.setSubMenu(AtmMenu::MenuState::HEATER, &menuHeat);
 
 	Homie_setFirmware("Zauberbox OpBox - IAKüche", VERSION_SHORT);
 	Homie.disableLedFeedback();
