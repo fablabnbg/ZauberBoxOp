@@ -58,7 +58,6 @@ void Atm_LEDCtrl::action( int id ) {
 	  }
       return;
     case ENT_WHITE_CTRL:
-      mainMenu.resetTimeout();
       return;
     case EXT_WHITE_CTRL:
       return;

@@ -8,13 +8,15 @@
  	 SubMachine(mm),
 	 HomieNode("heatSet", "Solltemperatur", "setpoint"),
 	 runOnce(false),
-	 deciTemp(180)
+	 deciTemp(0),
+	 deciTempAct(0)
  {
  }
 
 
  void Atm_MenuSetPoint::setup() {
 	 advertise("setTemp").setRetained(false).setDatatype("number").setName("Solltemperatur").setUnit("°C").settable();
+	 advertise("actTemp").setRetained(true).setDatatype("number").setName("Ist-Temperatur").setUnit("°C").settable();
 	 advertise("setTempCmd").setRetained(false).setDatatype("enum").setName("CMD Solltemperatur").setFormat("INCREMENT:DECREMENT:DEFAULT:READ");
 	 begin();
  }
@@ -71,6 +73,12 @@ bool Atm_MenuSetPoint::handleInput(const HomieRange &range,	const String &proper
 		if (state() == SET_CTRL) mainMenu.showDeciInt(deciTemp);
 		return true;
 	}
+	if (property.equals("actTemp")) {
+		deciTempAct = static_cast<int16_t>(value.toFloat() * 10);
+		if (state() == SET_CTRL) mainMenu.showDeciInt(deciTempAct, true);
+		return true;
+	}
+
 	return false;
 }
 
@@ -91,7 +99,6 @@ void Atm_MenuSetPoint::action( int id ) {
   	  }
       return;
     case ENT_SET_CTRL:
-      mainMenu.resetTimeout();
       return;
     case ENT_SET_INC:
         push(connectors, ON_SETCHANGE, 0, 1, 1);
@@ -133,9 +140,15 @@ Atm_MenuSetPoint& Atm_MenuSetPoint::start() {
   trigger( EVT_START );
   mainMenu.showIcon8x8(3, AtmMenu::sprite_heater);
   mainMenu.showDeciInt(deciTemp);
+  mainMenu.showDeciInt(deciTempAct, true);
   return *this;
 }
 
+
+Atm_MenuSetPoint& Atm_MenuSetPoint::timeout() {
+	trigger(EVT_TIMEOUT);
+	return *this;
+}
 /*
  * onSetchange() push connector variants ( slots 1, autostore 0, broadcast 0 )
  */

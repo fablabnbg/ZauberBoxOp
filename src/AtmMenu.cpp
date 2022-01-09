@@ -27,7 +27,7 @@ AtmMenu& AtmMenu::begin() {
 	    /*      IDLE */      ENT_IDLE,      -1, EXT_IDLE,     HEATER,       LED_B,    LED_CEIL,      COFFEE,          -1,        -1,            -1,           -1,   -1,
 	    /*     LED_B */     ENT_LED_B,      -1,      -1,          -1,          -1,          -1,          -1,   LEAVE_SUB,        -1,            -1,    LEAVE_SUB,   -1,
 	    /*  LED_CEIL */  ENT_LED_CEIL,      -1,      -1,          -1,          -1,          -1,          -1,   LEAVE_SUB,        -1,            -1,    LEAVE_SUB,   -1,
-	    /*    HEATER */    ENT_HEATER,      -1,      -1,          -1,          -1,          -1,          -1,   LEAVE_SUB,        -1,            -1,    LEAVE_SUB,   -1,
+	    /*    HEATER */    ENT_HEATER,      -1, EXT_HEATER,       -1,          -1,          -1,          -1,   LEAVE_SUB,        -1,            -1,    LEAVE_SUB,   -1,
 	    /*    COFFEE */    ENT_COFFEE,      -1,      -1,          -1,          -1,          -1,          -1,   LEAVE_SUB,        -1,            -1,    LEAVE_SUB,   -1,
 	    /* LEAVE_SUB */ ENT_LEAVE_SUB,      -1, EXT_LEAVE_SUB,    -1,          -1,          -1,          -1,   -1,         LEAVE_SUB,          IDLE,           -1,   -1,
 	  };
@@ -88,7 +88,7 @@ void AtmMenu::action(int id) {
 		showIcon8x8(0, sprite_heater);
 		return;
 	case EXT_IDLE:
-		timer.set(15000); 	// Default Timeout 15s
+		timer.set(30000); 	// Default Timeout 30s
 		panel.clear();
 		return;
 	case ENT_LED_B:
@@ -99,6 +99,9 @@ void AtmMenu::action(int id) {
 		return;
 	case ENT_HEATER:
 		sub_menu[HEATER]->start();
+		return;
+	case EXT_HEATER:
+		sub_menu[HEATER]->timeout();
 		return;
 	case ENT_COFFEE:
 		sub_menu[COFFEE]->start();
@@ -192,23 +195,27 @@ void AtmMenu::showIcon8x8(uint8_t pos, const uint8_t *icon_data) {
 }
 
 
-void AtmMenu::showDeciInt(const int16_t dInt) {
-	char s[5];
+void AtmMenu::showDeciInt(const int16_t dInt, bool act) {
 	String intStr(dInt);
 	assert(intStr.length()>=3);
-	s[0] = intStr.c_str()[0];
-	s[1] = intStr.c_str()[1];
-	s[2] = '.';
-	s[3] = intStr.c_str()[2];
-	s[4] = 0;
+//	char s[5];
+//	s[0] = intStr.c_str()[0];
+//	s[1] = intStr.c_str()[1];
+////	s[2] = '.';
+//	s[2] = intStr.c_str()[2];
+//	s[3] = 0;
 
-	//panel.getGraphicObject()->setFont(font3x5);
+	panel.getGraphicObject()->setFont(font3x5);
 	panel.setFont(font3x5);
-	uint16_t start_pos = 10;
-	panel.drawText(start_pos, 8, s);
-//	for (uint_fast8_t count=0; count<=3; count++) {
+	uint16_t start_pos = act? 21: 9;
+	panel.drawText(start_pos, act? 10:7, intStr.c_str());
+	panel.setPoint(start_pos+7, act? 4:1);
+
+	//	uint16_t start_pos = act? 22: 10;
+	//	for (uint_fast8_t count=0; count<=3; count++) {
 //		start_pos -= panel.getGraphicObject()->setChar(start_pos, s[count]);
 //		if (count == 0) start_pos--;
+//		if (count==1 || count==2) start_pos++;
 //	}
 
 }

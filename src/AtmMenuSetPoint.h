@@ -24,7 +24,10 @@ public:
   Atm_MenuSetPoint& onSetchange( atm_cb_push_t callback, int idx = 0 );
   Atm_MenuSetPoint& onWhite(atm_cb_lambda_t callback, int idx = 0);
 
-  Atm_MenuSetPoint& start();
+  //SubMachine
+  virtual Atm_MenuSetPoint& start() override;
+  virtual Atm_MenuSetPoint& timeout() override;
+
 
 protected:
   // HomieNode
@@ -41,6 +44,7 @@ protected:
 
   bool runOnce;
   int16_t deciTemp;
+  int16_t deciTempAct;
 
 };
 

@@ -17,6 +17,7 @@ public:
 	SubMachine(AtmMenu& mm);
 	virtual SubMachine& onExit( Machine& machine, int event = 0 );
 	virtual SubMachine& start() {return *this;};
+	virtual SubMachine& timeout() {return *this;};
 protected:
 	void exit_machine();
     AtmMenu& mainMenu;
