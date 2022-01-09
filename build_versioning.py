@@ -2,7 +2,7 @@
 
 FILENAME_BUILDNO = 'versioning'
 FILENAME_VERSION_H = 'include/version.h'
-version = 'AUTO_VERSION'
+version = 'GIT_VERSION'
 
 import datetime
 
@@ -18,8 +18,8 @@ with open(FILENAME_BUILDNO, 'w+') as f:
     print('Build number: {}'.format(build_no))
 
 hf = """
-#ifndef AUTO_VERSION
-#define AUTO_VERSION "git version n/a"
+#ifndef GIT_VERSION
+#define GIT_VERSION "git n/a"
 #endif
 #ifndef BUILD_NUMBER
   #define BUILD_NUMBER "{}"

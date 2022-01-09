@@ -64,6 +64,7 @@ void Atm_MenuOnOff::action( int id ) {
   	  }
       return;
     case ENT_CTRL:
+      mainMenu.resetTimeout();
       return;
     case ENT_CTRL_TOGGLE:
       push(connectors, ON_CTRL, 0, 1, 1);

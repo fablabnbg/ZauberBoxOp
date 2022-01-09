@@ -24,12 +24,12 @@ AtmMenu& AtmMenu::begin() {
   // clang-format off
 	  const static state_t state_table[] PROGMEM = {
 	    /*                   ON_ENTER  ON_LOOP  ON_EXIT  EVT_BUTTON1  EVT_BUTTON2  EVT_BUTTON3  EVT_BUTTON4  EVT_TIMEOUT  EVT_ANI_STEP  EVT_ANI_FINISH  EVT_SUB_EXIT  ELSE */
-	    /*      IDLE */      ENT_IDLE,      -1,      -1,      HEATER,       LED_B,    LED_CEIL,      COFFEE,          -1,        -1,            -1,           -1,   -1,
+	    /*      IDLE */      ENT_IDLE,      -1, EXT_IDLE,     HEATER,       LED_B,    LED_CEIL,      COFFEE,          -1,        -1,            -1,           -1,   -1,
 	    /*     LED_B */     ENT_LED_B,      -1,      -1,          -1,          -1,          -1,          -1,   LEAVE_SUB,        -1,            -1,    LEAVE_SUB,   -1,
 	    /*  LED_CEIL */  ENT_LED_CEIL,      -1,      -1,          -1,          -1,          -1,          -1,   LEAVE_SUB,        -1,            -1,    LEAVE_SUB,   -1,
 	    /*    HEATER */    ENT_HEATER,      -1,      -1,          -1,          -1,          -1,          -1,   LEAVE_SUB,        -1,            -1,    LEAVE_SUB,   -1,
 	    /*    COFFEE */    ENT_COFFEE,      -1,      -1,          -1,          -1,          -1,          -1,   LEAVE_SUB,        -1,            -1,    LEAVE_SUB,   -1,
-	    /* LEAVE_SUB */ ENT_LEAVE_SUB, LP_LEAVE_SUB, EXT_LEAVE_SUB,  -1,       -1,          -1,          -1,   -1,         LEAVE_SUB,          IDLE,           -1,   -1,
+	    /* LEAVE_SUB */ ENT_LEAVE_SUB,      -1, EXT_LEAVE_SUB,    -1,          -1,          -1,          -1,   -1,         LEAVE_SUB,          IDLE,           -1,   -1,
 	  };
 
   // clang-format on
@@ -38,18 +38,12 @@ AtmMenu& AtmMenu::begin() {
 	but2.begin(D2).onPress(*this, EVT_BUTTON2);
 	but3.begin(D3).onPress(*this, EVT_BUTTON3);
 	but4.begin(D4).onPress(*this, EVT_BUTTON4);
-
-	//panel.clear();
-	//Parola.displayText("Initialize", PA_CENTER, Parola.getSpeed(), 1000, PA_SPRITE, PA_SPRITE);
-	//Parola.setSpriteData(rocket, W_ROCKET, F_ROCKET, rocket, W_ROCKET, F_ROCKET);
-	//Parola.setSpriteData(sprite_coffee, 8, 1, sprite_coffee, 8, 1);
 	return *this;
 }
 
 void AtmMenu::setSubMenu(uint_fast8_t idx, SubMachine *m) {
 	sub_menu[idx] = m;
 	m->onExit(*this, EVT_SUB_EXIT);
-
 }
 
 /* Add C++ code for each internally handled event (input)
@@ -86,53 +80,35 @@ void AtmMenu::action(int id) {
 	switch (id) {
 	case ENT_IDLE:
 		timer.set(ATM_TIMER_OFF);
-		animator.begin(0);
-		//Parola.displaySuspend(true);
+		animator.begin(0);			// Set to 0, so it is in IDLE state for sure (see ENT_LEAVE_SUB)
+		// Show Main Menu
 		showIcon8x8(3, sprite_coffee);
 		showIcon8x8(2, sprite_light_ceil);
 		showIcon8x8(1, sprite_light_below);
 		showIcon8x8(0, sprite_heater);
 		return;
-//	case EXT_IDLE:
-//		Parola.displaySuspend(false);
-//		timer.set(2000);
-//		return;
-	case ENT_LED_B:
-		//timer.set(5000);
-		timer.set(15000);
-		//Parola.displaySuspend(true);
+	case EXT_IDLE:
+		timer.set(15000); 	// Default Timeout 15s
 		panel.clear();
+		return;
+	case ENT_LED_B:
 		sub_menu[LED_B]->start();
-//		Parola.displayText("LED W", PA_CENTER, Parola.getSpeed(), 100, PA_SPRITE, PA_SPRITE);
-//		Parola.setSpriteData(sprite_light, 8, 1, sprite_light, 8, 1);
 		return;
 	case ENT_LED_CEIL:
-		timer.set(5000);
-//		Parola.displayText("LED RGBV", PA_CENTER, Parola.getSpeed(), 100, PA_SPRITE, PA_SPRITE);
-//		Parola.setSpriteData(sprite_light_ceil, 8, 1, sprite_light_ceil, 8, 1);
+		timer.set(5000);	// unfinished state, so return faster
 		return;
 	case ENT_HEATER:
-		timer.set(15000);
-		panel.clear();
 		sub_menu[HEATER]->start();
-//
-//		Parola.displayText("Thermo", PA_CENTER, Parola.getSpeed(), 100, PA_SPRITE, PA_SPRITE);
-//		Parola.setSpriteData(sprite_heater, 8, 1, sprite_heater, 8, 1);
 		return;
 	case ENT_COFFEE:
-		//timer.set(5000);
-		timer.set(15000);
-		panel.clear();
 		sub_menu[COFFEE]->start();
-//		Parola.displayText("Kaffee", PA_CENTER, Parola.getSpeed(), 1000, PA_SPRITE, PA_SPRITE);
-//		Parola.setSpriteData(sprite_coffee, 8, 1, sprite_coffee, 8, 1);
 		return;
 	case ENT_LEAVE_SUB:
+		// Start animation timer/counter, but only if it is not already running
 		if (animator.state() == Atm_timer::IDLE) animator.begin(50, 7).onTimer(*this, EVT_ANI_STEP).onFinish(*this, EVT_ANI_FINISH).start();
 		return;
-	case LP_LEAVE_SUB:
-      return;
 	case EXT_LEAVE_SUB:
+		// Leaving animation: transform 1 Row up
 		panel.getGraphicObject()->transform(MD_MAX72XX::TSU);
 		return;
 	}
@@ -217,21 +193,23 @@ void AtmMenu::showIcon8x8(uint8_t pos, const uint8_t *icon_data) {
 
 
 void AtmMenu::showDeciInt(const int16_t dInt) {
-	char s[4];
+	char s[5];
 	String intStr(dInt);
 	assert(intStr.length()>=3);
 	s[0] = intStr.c_str()[0];
 	s[1] = intStr.c_str()[1];
 	s[2] = '.';
 	s[3] = intStr.c_str()[2];
+	s[4] = 0;
 
-	panel.getGraphicObject()->setFont(font3x5);
+	//panel.getGraphicObject()->setFont(font3x5);
 	panel.setFont(font3x5);
-	uint16_t start_pos = 18;
-	for (uint_fast8_t count=0; count<=3; count++) {
-		start_pos -= panel.getGraphicObject()->setChar(start_pos, s[count]);
-		if (count == 0) start_pos--;
-	}
+	uint16_t start_pos = 10;
+	panel.drawText(start_pos, 8, s);
+//	for (uint_fast8_t count=0; count<=3; count++) {
+//		start_pos -= panel.getGraphicObject()->setChar(start_pos, s[count]);
+//		if (count == 0) start_pos--;
+//	}
 
 }
 void AtmMenu::showSmallText(const String& text) {
@@ -243,10 +221,6 @@ void AtmMenu::showSmallText(const String& text) {
 //	Parola.getGraphicObject()->setChar(8, '5');
 
 }
-//uint8_t AtmMenu::sprite_heater[9] = {0x0c,0x92,0x61,0x0c,0x92,0x61,0x00,0xff,0};
-//uint8_t AtmMenu::sprite_light[9] = {0x18,0x24,0x42,0x42,0x42,0x24,0x18,0x18,0};
-//uint8_t AtmMenu::sprite_heater[9] = {0x0c,0x92,0x61,0x0c,0x92,0x61,0x00,0xff,0};
-//uint8_t AtmMenu::sprite_clock[9] =  {0x3c,0x42,0x81,0xf1,0x91,0x91,0x42,0x3c,0};
 
 
 

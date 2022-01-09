@@ -2,6 +2,7 @@
 .pio/
 .settings/
 versioning
+include/version.h
 
 # sensitive data (passwords etc.)
 data/homie/config.json

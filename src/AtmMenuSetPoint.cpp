@@ -68,7 +68,7 @@ bool Atm_MenuSetPoint::handleInput(const HomieRange &range,	const String &proper
 	LN.logf("MenuSetPoint::handleInput", LoggerNode::DEBUG, "Incoming MQTT message for property %s with string \"%s\"\n", property.c_str(), value.c_str() );
 	if (property.equals("setTemp")) {
 		deciTemp = static_cast<int16_t>(value.toFloat() * 10);
-		mainMenu.showDeciInt(deciTemp);
+		if (state() == SET_CTRL) mainMenu.showDeciInt(deciTemp);
 		return true;
 	}
 	return false;
@@ -91,6 +91,7 @@ void Atm_MenuSetPoint::action( int id ) {
   	  }
       return;
     case ENT_SET_CTRL:
+      mainMenu.resetTimeout();
       return;
     case ENT_SET_INC:
         push(connectors, ON_SETCHANGE, 0, 1, 1);
@@ -131,10 +132,7 @@ int Atm_MenuSetPoint::state( void ) {
 Atm_MenuSetPoint& Atm_MenuSetPoint::start() {
   trigger( EVT_START );
   mainMenu.showIcon8x8(3, AtmMenu::sprite_heater);
-  //mainMenu.showSmallText(String(deciTemp));
   mainMenu.showDeciInt(deciTemp);
-//  mainMenu.showIcon8x8(1, AtmMenu::sprite_onoff);
-//  mainMenu.showIcon8x8(0, sprite_clean);
   return *this;
 }
 

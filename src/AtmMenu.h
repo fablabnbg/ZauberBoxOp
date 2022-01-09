@@ -48,9 +48,19 @@ class AtmMenu: public Machine {
   void showDeciInt(const int16_t dInt);
 
 
+  /* Other functions for SubMenus
+   *
+   *
+   *
+   */
+
+  void resetTimeout() {
+	  /*if (!(timer.value == ATM_TIMER_OFF || timer.expired(this)))*/ timer.set(5000)); 	// Default Timeout 5s
+  }
+
 
  private:
-  enum { ENT_IDLE, ENT_LED_B, ENT_LED_CEIL, ENT_HEATER, ENT_COFFEE, ENT_LEAVE_SUB, LP_LEAVE_SUB, EXT_LEAVE_SUB }; // ACTIONS
+  enum { ENT_IDLE, EXT_IDLE, ENT_LED_B, ENT_LED_CEIL, ENT_HEATER, ENT_COFFEE, ENT_LEAVE_SUB, EXT_LEAVE_SUB }; // ACTIONS
   int event( int id );
   void action( int id );
 

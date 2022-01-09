@@ -6,9 +6,9 @@ def get_firmware_specifier_build_flag():
     #ret = subprocess.run(["git", "describe"], stdout=subprocess.PIPE, text=True) #Uses only annotated tags
     ret = subprocess.run(["git", "describe", "--tags"], stdout=subprocess.PIPE, text=True) #Uses any tags
     #ret = subprocess.run(["git", "describe", "--all"], stdout=subprocess.PIPE, text=True) #Uses any tags
-    build_version = ret.stdout.strip().split('-')[0]
-    build_flag = "-D AUTO_VERSION=\\\"" + build_version + "\\\""
-    print ("Firmware Revision: " + build_version)
+    build_version = ret.stdout.strip().split('-')
+    print ("Firmware Revision: " + str(build_version))
+    build_flag = "-D GIT_VERSION=\\\"" + build_version[0] + "\\\"" + " -D COMMIT_VERSION=\\\"" + build_version[1] + "\\\"" + " -D GIT_HASH=\\\"" + build_version[2] + "\\\""
     return (build_flag)
 
 env.Append(
