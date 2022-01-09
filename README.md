@@ -1,6 +1,10 @@
 # ZauberBoxOp
 A "ZauberBox" with Buttons - Software uses final state machines to send various commands via MQTT
 
+![Photo of ZauberBox OP](doc/IMG20220104000213_cropped.jpg)
+
+
+
 # Software
 
 ## Build
