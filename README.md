@@ -30,3 +30,7 @@ A "ZauberBox" with Buttons - Software uses final state machines to send various 
 * glue eveything together (I wood is of good quality you don't need that much glue)
 * Glue a very thin piece of wood (balsa etc.) to the front
 * When glue has dried, sand the box to smoothen surfaces
+
+# Example for OpenHAB integration
+
+See [OpenHAB integration](doc/OpenHAB/README.MD)
