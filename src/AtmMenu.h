@@ -13,7 +13,7 @@
 #include <Atm_timer.hpp>
 #include <atm_timer_millis.hpp>
 #include <atm_counter.hpp>
-#include <MD_Parola.h>
+#include <MD_MAXPanel.h>
 #include <MD_MAX72xx.h>
 #include <SPI.h>
 
@@ -68,7 +68,7 @@ class AtmMenu: public Machine {
   // need to be adapted
   #define HARDWARE_TYPE MD_MAX72XX::FC16_HW
   #define MAX_DEVICES 4
-  MD_Parola Parola;
+  MD_MAXPanel panel;
 
   static const uint8_t sprite_startPos[4];
 public:
