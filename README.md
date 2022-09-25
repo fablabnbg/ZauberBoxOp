@@ -24,7 +24,7 @@ A "ZauberBox" with Buttons - Software uses final state machines to send various 
 
 # How to build the Box
 
-* detailed instructions comming soon
+## Summary
 
 * Optional: Adapt FreeCAD project to your needs (other sizes) and export SVG files for laser cutter
 * Use SVG files to lasercut the case
@@ -34,6 +34,10 @@ A "ZauberBox" with Buttons - Software uses final state machines to send various 
 * glue eveything together (I wood is of good quality you don't need that much glue)
 * Glue a very thin piece of wood (balsa etc.) to the front
 * When glue has dried, sand the box to smoothen surfaces
+
+## Details
+
+* For detailled instructions, see [Assembling](doc/Assembling.MD)
 
 # Example for OpenHAB integration
 
